@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101b20" />
+    <meta name="description" content="A small, choice-driven story about a solo AI developer. Every race starts somewhere." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23101b20' d='M0 0h32v32H0z'/%3E%3Cpath fill='%23e9b66b' d='m7 8 8 8-8 8 3 3 11-11L10 5zM19 23h8v4h-8z'/%3E%3C/svg%3E" />
+    <title>The Intelligence Race</title>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="masthead">
+        <a class="wordmark" href="./" aria-label="The Intelligence Race, start again"><span aria-hidden="true">&gt;_</span> THE INTELLIGENCE RACE</a>
+        <span class="edition">v0.1 / Opening scene</span>
+      </header>
+      <main>
+        <div class="intro">
+          <p class="eyebrow">2026 · Somewhere in a small apartment</p>
+          <h1>Every race starts <em>somewhere.</em></h1>
+          <p>One developer. One workstation. A first decision.</p>
+        </div>
+        <div class="game-layout">
+          <figure class="scene-panel">
+            <div class="panel-heading"><span>01 / Your room</span><span class="local-label"><i></i> Solo developer</span></div>
+            <div class="room" role="img" aria-label="A small pixel-art apartment at night, with a glowing computer on a wooden desk, a chair, a warm lamp, books, and a plant beside the window.">
+              <div class="window"><span class="moon"></span><span class="skyline"></span></div>
+              <div class="shelf"><span class="books"></span></div>
+              <div class="note"></div>
+              <div class="rug"></div>
+              <div class="plant"><span></span></div>
+              <div class="desk"></div>
+              <div class="monitor"><span class="code-line"></span><span class="cursor"></span></div>
+              <div class="keyboard"></div>
+              <div class="mug"></div>
+              <div class="lamp"><span></span></div>
+              <div class="tower"><span></span></div>
+              <div class="chair"></div>
+              <div class="box"></div>
+              <span class="room-label" aria-hidden="true">HOME / WORK / EVERYTHING</span>
+            </div>
+            <figcaption><span class="scene-marker" aria-hidden="true">&gt;_</span><span id="scene-caption">A quiet room. An open terminal. Nothing built yet.</span></figcaption>
+          </figure>
+          <section class="story-panel" aria-labelledby="story-heading">
+            <div class="panel-heading"><span>Opening / A small beginning</span><span aria-hidden="true">···</span></div>
+            <div class="story-content">
+              <div class="speaker"><span class="narrator-icon" aria-hidden="true">N</span><h2 id="story-heading">Narrator</h2><span>NOW</span></div>
+              <p id="introduction"></p>
+              <p class="prompt" id="choice-prompt">Where will you begin?</p>
+              <div id="choices" class="choices" role="group" aria-labelledby="choice-prompt"></div>
+              <div id="outcome" hidden>
+                <p class="player-message"><span>You chose</span><strong id="chosen-action"></strong></p>
+                <h3 id="outcome-title" tabindex="-1" aria-describedby="outcome-text"></h3>
+                <p id="outcome-text"></p>
+                <p class="end-note">This is just the beginning. Restart to try another direction.</p>
+              </div>
+              <div class="story-footer"><span id="progress">Choose your first step</span><button id="restart" type="button"><span aria-hidden="true">↺</span> Restart</button></div>
+            </div>
+          </section>
+        </div>
+        <footer class="page-footer"><span>A small beginning to a much bigger story.</span><span>Local play · No account needed</span></footer>
+      </main>
+    </div>
+    <noscript>This game needs JavaScript enabled. No account or API connection is required.</noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
