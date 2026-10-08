@@ -16,6 +16,16 @@ let state = startGame();
 
 element('introduction').textContent = introduction;
 
+function formatMoney(value: number): string {
+  return `$${value.toLocaleString('en-US')} USD`;
+}
+
+function formatDelta(value: number, unit: 'money' | 'research'): string {
+  const amount = unit === 'money' ? formatMoney(Math.abs(value)) : `${Math.abs(value)} points`;
+  if (value === 0) return `${amount} (unchanged)`;
+  return `${value > 0 ? '+' : '−'}${amount}`;
+}
+
 for (const [index, choice] of choices.entries()) {
   const button = document.createElement('button');
   button.type = 'button';
@@ -31,7 +41,11 @@ for (const [index, choice] of choices.entries()) {
   title.textContent = choice.title;
   const description = document.createElement('span');
   description.textContent = choice.description;
-  copy.append(title, description);
+  const effects = document.createElement('span');
+  effects.className = 'choice-effects';
+  const { days, money, research } = choice.effects;
+  effects.textContent = `${days} ${days === 1 ? 'day' : 'days'} · Money: ${formatDelta(money, 'money')} · Research: ${formatDelta(research, 'research')}`;
+  copy.append(title, description, effects);
   button.append(number, copy);
   button.addEventListener('click', () => {
     state = chooseAction(state, choice);
@@ -43,6 +57,11 @@ for (const [index, choice] of choices.entries()) {
 
 function render() {
   const choice = state.choice;
+  element('game-date').textContent = state.date.toLocaleDateString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric',
+  });
+  element('money').textContent = formatMoney(state.money);
+  element('research').textContent = `${state.research} points`;
   choiceList.hidden = choice !== null;
   prompt.hidden = choice !== null;
   outcome.hidden = choice === null;
