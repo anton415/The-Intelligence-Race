@@ -28,15 +28,35 @@ Open the local URL printed by Vite (normally http://localhost:5173/The-Intellige
 ```bash
 npm run build    # Type-check and build into dist/
 npm run preview  # Serve the production build locally
+npm test         # Check state transitions, local dates, boundaries, and restart
 ```
 
 The production preview uses the same `/The-Intelligence-Race/` path as GitHub Pages.
 
-**Implemented in Issue #1:** one pixel-style developer room with a blinking monitor, a
-2026 introduction, and exactly three opening choices. Each has a fixed, distinct
-outcome. **Restart** restores the introduction so you can try the other paths.
+The opening has one pixel-style developer room with a blinking monitor, an
+introduction, and exactly three choices. Each has a fixed, distinct outcome and
+shows its duration and resource changes before selection, including unchanged resources.
+The status panel displays the in-game date, money in USD, and research progress in points.
+**Restart** restores the introduction so you can try the other paths.
 Use Tab/Shift+Tab to move between controls and Enter/Space to activate buttons.
 The monitor animation respects your system's reduced-motion preference.
+
+New games start on the player's **current local calendar date**, with **$1,000 USD**
+and **0 research points**. These are simple prototype values, not an economic model;
+research points are a cumulative score, not a percentage or a completed project.
+
+| Opening choice | Time | Money change | Research change |
+| --- | --- | --- | --- |
+| Build something small | 2 days | −$100 USD | +10 points |
+| Understand the research | 3 days | $0 USD (unchanged) | +20 points |
+| Find your people | 1 day | $0 USD (unchanged) | 0 points (unchanged) |
+
+Each choice applies its effects **once**, then shows its authored outcome and scene
+caption. Time advances in calendar days, including across month/year boundaries
+and daylight-saving changes. Waiting, inspecting, or leaving the game does not
+advance time or resources. Restart creates a fresh opening with the current local
+date and starting resources, restores all three choices, and focuses the first one.
+There is no saving yet: reloading also starts a new game.
 
 The game runs entirely in the browser. It uses local CSS artwork and prewritten
 text: no API calls, sign-in, backend, or remote assets. The community conversation
@@ -44,11 +64,15 @@ is fictional; choosing it does not send a real message. Installing dependencies
 requires internet access; playing through the local server does not.
 
 Story data and decision state live in `src/game.ts`; `src/main.ts` presents them,
-and `src/style.css` draws the room. This is only the opening interaction, not the
-full v0.1 described below. Time, resources, saving, and further turns are not implemented.
+and `src/style.css` draws the room. Starting resources, choice effects, and transition
+rules are all in `src/game.ts`. This is only the opening interaction, not the full
+v0.1 described below. Saving and further turns are not implemented.
 
-To check the slice manually: try each of the three choices, restart after each,
-and confirm each response repeats exactly. Try the same loop with the keyboard.
+To check the slice manually: note the opening date/resources and each choice's
+advertised effects, try all three choices, and restart after each. Confirm the
+resulting date/resources match those effects, each response repeats exactly from
+the same starting state, and repeated activation or waiting changes nothing.
+Try the same loop with the keyboard and a narrow viewport.
 
 ## The premise
 
