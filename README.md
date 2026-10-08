@@ -2,6 +2,18 @@
 
 A single-player, choice-driven game about developing AI, building organizations, and living with the consequences in a persistent alternate-history world.
 
+## Play now
+
+**[Play The Intelligence Race](https://anton415.github.io/The-Intelligence-Race/)**
+
+The first release, **v0.1.0**, is the playable opening scene. Try all three choices
+and restart between them. We will expand the game in small, playable updates.
+
+The GitHub Pages site rebuilds and updates automatically whenever changes merge
+into `main`. Versioned snapshots and release notes are available in
+**[GitHub Releases](https://github.com/anton415/The-Intelligence-Race/releases)**.
+The live site follows `main`, so it may include changes newer than the latest release.
+
 ## Play the opening screen locally
 
 Use Node.js 20.19+ (20.x), or 22.12+ and npm, as required by [Vite](https://vite.dev/guide/).
@@ -11,12 +23,14 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite (normally http://localhost:5173).
+Open the local URL printed by Vite (normally http://localhost:5173/The-Intelligence-Race/).
 
 ```bash
 npm run build    # Type-check and build into dist/
 npm run preview  # Serve the production build locally
 ```
+
+The production preview uses the same `/The-Intelligence-Race/` path as GitHub Pages.
 
 **Implemented in Issue #1:** one pixel-style developer room with a blinking monitor, a
 2026 introduction, and exactly three opening choices. Each has a fixed, distinct
