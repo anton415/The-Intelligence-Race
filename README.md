@@ -2,6 +2,40 @@
 
 A single-player, choice-driven game about developing AI, building organizations, and living with the consequences in a persistent alternate-history world.
 
+## Play the opening screen locally
+
+Use Node.js 20.19+ (20.x), or 22.12+ and npm, as required by [Vite](https://vite.dev/guide/).
+
+```bash
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite (normally http://localhost:5173).
+
+```bash
+npm run build    # Type-check and build into dist/
+npm run preview  # Serve the production build locally
+```
+
+**Implemented in Issue #1:** one pixel-style developer room with a blinking monitor, a
+2026 introduction, and exactly three opening choices. Each has a fixed, distinct
+outcome. **Restart** restores the introduction so you can try the other paths.
+Use Tab/Shift+Tab to move between controls and Enter/Space to activate buttons.
+The monitor animation respects your system's reduced-motion preference.
+
+The game runs entirely in the browser. It uses local CSS artwork and prewritten
+text: no API calls, sign-in, backend, or remote assets. The community conversation
+is fictional; choosing it does not send a real message. Installing dependencies
+requires internet access; playing through the local server does not.
+
+Story data and decision state live in `src/game.ts`; `src/main.ts` presents them,
+and `src/style.css` draws the room. This is only the opening interaction, not the
+full v0.1 described below. Time, resources, saving, and further turns are not implemented.
+
+To check the slice manually: try each of the three choices, restart after each,
+and confirm each response repeats exactly. Try the same loop with the keyboard.
+
 ## The premise
 
 Start a new game on the real-world date you begin playing. You are a solo AI developer with limited resources. Build useful AI, compete and collaborate with other organizations, hire people, delegate to AI agents, or change careers as events unfold.
