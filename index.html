@@ -12,7 +12,7 @@
     <div class="shell">
       <header class="masthead">
         <a class="wordmark" href="./" aria-label="The Intelligence Race, start again"><span aria-hidden="true">&gt;_</span> THE INTELLIGENCE RACE</a>
-        <span class="edition">v0.1 / Opening scene</span>
+        <span class="edition">v0.1 / First project</span>
       </header>
       <main>
         <div class="intro">
@@ -47,17 +47,20 @@
             <figcaption><span class="scene-marker" aria-hidden="true">&gt;_</span><span id="scene-caption">A quiet room. An open terminal. Nothing built yet.</span></figcaption>
           </figure>
           <section class="story-panel" aria-labelledby="story-heading">
-            <div class="panel-heading"><span>Opening / A small beginning</span><span aria-hidden="true">···</span></div>
+            <div class="panel-heading"><span id="story-label">Opening / A small beginning</span><span aria-hidden="true">···</span></div>
             <div class="story-content">
               <div class="speaker"><span class="narrator-icon" aria-hidden="true">N</span><h2 id="story-heading">Narrator</h2><span>NOW</span></div>
               <p id="introduction"></p>
-              <p class="prompt" id="choice-prompt">Where will you begin?</p>
+              <p id="opening-decision" class="end-note" hidden></p>
+              <p class="prompt" id="choice-prompt" tabindex="-1">Where will you begin?</p>
               <div id="choices" class="choices" role="group" aria-labelledby="choice-prompt"></div>
               <div id="outcome" hidden>
                 <p class="player-message"><span>You chose</span><strong id="chosen-action"></strong></p>
                 <h3 id="outcome-title" tabindex="-1" aria-describedby="outcome-text"></h3>
                 <p id="outcome-text"></p>
-                <p class="end-note">This is just the beginning. Restart to try another direction.</p>
+                <ul id="evaluation" aria-label="Project evaluation checks" hidden></ul>
+                <div id="continuation"></div>
+                <p id="end-note" class="end-note" hidden>This project ends here. Restart to try a different approach; further projects and saving are still to come.</p>
               </div>
               <div class="story-footer"><span id="progress">Choose your first step</span><button id="restart" type="button"><span aria-hidden="true">↺</span> Restart</button></div>
             </div>

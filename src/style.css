@@ -63,6 +63,9 @@ h2 { font-size: 12px; margin: 0; font-weight: 600; }
 .player-message strong { font-weight: 500; }
 h3 { font-size: 15px; line-height: 1.5; color: var(--accent); margin: 22px 0 10px; }
 .end-note { color: var(--muted); }
+#evaluation { padding-left: 18px; font-size: 11px; color: var(--muted); }
+#evaluation li { margin: 12px 0; }
+#evaluation strong { display: block; color: #dbe1d9; font-weight: 500; }
 .page-footer { display: flex; justify-content: space-between; gap: 20px; margin: 27px 0 30px; color: var(--muted); font-size: 10px; }
 
 /* A local pixel room made from hard-edged, reusable CSS shapes. */

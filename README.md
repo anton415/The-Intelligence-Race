@@ -6,15 +6,16 @@ A single-player, choice-driven game about developing AI, building organizations,
 
 **[Play The Intelligence Race](https://anton415.github.io/The-Intelligence-Race/)**
 
-The first release, **v0.1.0**, is the playable opening scene. Try all three choices
-and restart between them. We will expand the game in small, playable updates.
+The first release, **v0.1.0**, is the playable opening scene. The current source
+extends it into a first notes-search project: choose → build → test → evaluate.
+We will expand the game in small, playable updates.
 
 The GitHub Pages site rebuilds and updates automatically whenever changes merge
 into `main`. Versioned snapshots and release notes are available in
 **[GitHub Releases](https://github.com/anton415/The-Intelligence-Race/releases)**.
 The live site follows `main`, so it may include changes newer than the latest release.
 
-## Play the opening screen locally
+## Play locally
 
 Use Node.js 20.19+ (20.x), or 22.12+ and npm, as required by [Vite](https://vite.dev/guide/).
 
@@ -28,7 +29,7 @@ Open the local URL printed by Vite (normally http://localhost:5173/The-Intellige
 ```bash
 npm run build    # Type-check and build into dist/
 npm run preview  # Serve the production build locally
-npm test         # Check state transitions, local dates, boundaries, and restart
+npm test         # Check opening/project transitions, evaluations, dates, and restart
 ```
 
 The production preview uses the same `/The-Intelligence-Race/` path as GitHub Pages.
@@ -37,6 +38,8 @@ The opening has one pixel-style developer room with a blinking monitor, an
 introduction, and exactly three choices. Each has a fixed, distinct outcome and
 shows its duration and resource changes before selection, including unchanged resources.
 The status panel displays the in-game date, money in USD, and research progress in points.
+Every opening outcome offers a free continuation into the same notes-search project,
+preserving the opening decision, date, money, and research.
 **Restart** restores the introduction so you can try the other paths.
 Use Tab/Shift+Tab to move between controls and Enter/Space to activate buttons.
 The monitor animation respects your system's reduced-motion preference.
@@ -51,11 +54,48 @@ research points are a cumulative score, not a percentage or a completed project.
 | Understand the research | 3 days | $0 USD (unchanged) | +20 points |
 | Find your people | 1 day | $0 USD (unchanged) | 0 points (unchanged) |
 
-Each choice applies its effects **once**, then shows its authored outcome and scene
-caption. Time advances in calendar days, including across month/year boundaries
-and daylight-saving changes. Waiting, inspecting, or leaving the game does not
-advance time or resources. Restart creates a fresh opening with the current local
-date and starting resources, restores all three choices, and focuses the first one.
+### First project: search your notes
+
+The goal is to find a relevant note using exact wording or a paraphrase, flag
+conflicting notes, and admit when the notes contain no answer. After the opening,
+choose a build approach, read its result, then choose a testing approach. The second
+choice includes evaluation and ends the project. All notes, models, and results
+are fictional and authored; no user files are read and no real AI is run.
+
+| Project step | Choice | Time | Money change | Research change |
+| --- | --- | --- | --- | --- |
+| Build | Match the words | 2 days | −$60 USD | +5 points |
+| Build | Search by meaning | 3 days | −$180 USD | +10 points |
+| Test | Check one familiar question | 1 day | $0 USD (unchanged) | +5 points |
+| Test | Test edge cases and repair | 2 days | −$80 USD | +15 points |
+
+These are prototype costs, not estimates of real AI development. The most expensive
+complete path spends $360 including the opening, leaving $640; all 12 combinations
+of opening, build, and test can finish. Research remains a cumulative score and
+does not secretly alter the evaluation.
+
+Evaluation always uses four fixed checks. The quick test confirms an exact match
+without repairs. The deeper test adds conflict warnings and rejection of weak
+matches; it does not add meaning search to a keyword index.
+
+| Build + test | Exact wording | Reworded question | Conflicting notes | No answer in notes | Consequence |
+| --- | --- | --- | --- | --- | --- |
+| Words + familiar question | Pass | Fail | Fail | Pass | Set aside for repair (2/4) |
+| Meaning + familiar question | Pass | Pass | Fail | Fail | Set aside for repair (2/4) |
+| Words + edge cases | Pass | Fail | Pass | Pass | Keep as an exact-word finder (3/4) |
+| Meaning + edge cases | Pass | Pass | Pass | Pass | Keep for personal use with review (4/4) |
+
+Each ending explains the checks and how the decisions contributed. Passing four
+examples does not establish general reliability. The same decisions always produce
+the same result; the opening affects resources and remains recorded, but introduces
+no hidden quality bonus. Setbacks end with a repair plan, not a dead end or Game Over.
+
+Each committed choice applies its effects **once**. Reading build results and using
+the two continuation buttons cost no time or resources. Time advances in calendar
+days, including across month/year boundaries and daylight-saving changes. Waiting,
+inspecting, or leaving the game does not advance time or resources. Restart at any
+step clears both opening and project decisions, uses the current local date and
+starting resources, restores all three opening choices, and focuses the first one.
 There is no saving yet: reloading also starts a new game.
 
 The game runs entirely in the browser. It uses local CSS artwork and prewritten
@@ -65,14 +105,18 @@ requires internet access; playing through the local server does not.
 
 Story data and decision state live in `src/game.ts`; `src/main.ts` presents them,
 and `src/style.css` draws the room. Starting resources, choice effects, and transition
-rules are all in `src/game.ts`. This is only the opening interaction, not the full
-v0.1 described below. Saving and further turns are not implemented.
+rules and fixed evaluation checks are all in `src/game.ts`. This is the opening plus
+one project loop, not the full 10–15 minute v0.1 described below. Saving, further
+projects, rival events, hiring, and company simulation are not implemented.
 
-To check the slice manually: note the opening date/resources and each choice's
-advertised effects, try all three choices, and restart after each. Confirm the
-resulting date/resources match those effects, each response repeats exactly from
-the same starting state, and repeated activation or waiting changes nothing.
-Try the same loop with the keyboard and a narrow viewport.
+To check the slice manually, use `npm run build` and `npm run preview`, then open
+`/The-Intelligence-Race/`. Try each opening through a project conclusion, and all
+four build/test combinations. Confirm advertised costs, free continuation, distinct
+evaluation explanations, and deterministic replay. Try repeated activation and
+waiting; neither should duplicate costs or skip a decision. Restart from the build,
+build result, testing step, and conclusion; check resources, date, and first-choice
+focus. Repeat with Tab/Shift+Tab and Enter/Space, a narrow viewport, and reduced
+motion enabled. The project loop requires user playtest acceptance before merge.
 
 ## The premise
 
