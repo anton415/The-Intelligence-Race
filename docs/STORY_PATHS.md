@@ -15,7 +15,7 @@ Verified against [the story and state rules](../src/game.ts) after PR #7
 Every solid arrow below is implemented. Boxes summarize scenes and decisions;
 free narration continuations are omitted.
 
-![Current paths: all three openings converge on the notes-search project, then branch into four build and test outcomes.](diagrams/current-paths.svg)
+<img src="diagrams/current-paths.svg" width="900" alt="Current paths: all three openings converge on the notes-search project, then branch into four build and test outcomes.">
 
 [Open full-size diagram](diagrams/current-paths.svg) · [Edit Mermaid source](diagrams/current-paths.mmd)
 
@@ -43,7 +43,7 @@ connections. **Amber boxes with dashed borders** are proposed scenes or extensio
 The prototype and checks boxes would reuse the current project where appropriate;
 their placement and connections below are still proposed.
 
-![Proposed story web: build, research, and community routes cross between scenes and reach different outcomes.](diagrams/proposed-story-web.svg)
+<img src="diagrams/proposed-story-web.svg" width="900" alt="Proposed story web: build, research, and community routes cross between scenes and reach different outcomes.">
 
 [Open full-size diagram](diagrams/proposed-story-web.svg) · [Edit Mermaid source](diagrams/proposed-story-web.mmd)
 
