@@ -25,8 +25,8 @@ export const choices = [
     effects: { days: 3, money: 0, research: 20 },
     outcomeTitle: "A better question.",
     outcome:
-      "You pull up a paper on evaluating AI agents and work through its examples. One result depends on a detail buried in the setup. Your notebook fills with questions. You haven’t built a model tonight, but you know what you want to test first.",
-    caption: "A paper on the screen. The notebook is no longer empty.",
+      "You read a fictional evaluation report claiming four correct answers out of four. But one returned note names a day when the question asks for a place. Your notebook fills with questions. Before building anything, you want to know what that perfect score actually measures.",
+    caption: "An evaluation report on the screen. A perfect score with a question mark.",
   },
   {
     id: "connect",
@@ -41,6 +41,41 @@ export const choices = [
 ] as const;
 
 export type Choice = (typeof choices)[number];
+
+export const investigationGoal =
+  'A tiny fictional notes-search evaluation reports 4/4: its scorer counts any retrieved note as a correct answer. Yet “Where is our venue?” returns “The reading group meets Tuesday.” No place is given. Your question: does retrieving a note establish that the question was answered? Check either the search’s sensitivity to wording or the scorer’s treatment of missing answers. These are authored examples, not real experiments.';
+
+export const investigationChoices = [
+  {
+    id: 'wording',
+    title: 'Change only the wording',
+    description: 'Keep the note and intended answer fixed. Compare an exact phrase with a paraphrase in a toy keyword search.',
+    effects: { days: 1, money: 0, research: 10 },
+    outcomeTitle: 'The fact stayed still. The result moved.',
+    outcome: 'You hold one note fixed: “The reading group meets Tuesday.” In the toy keyword search, “When does the reading group meet?” retrieves it; “Which day is the book club?” returns no match. Both ask for Tuesday. Changing only the wording exposes a missed answer, so a score based on familiar phrases hides a real limitation. This one pair does not measure how often search fails, test conflicting notes, or resolve the original missing-place example.',
+    finding: 'Your finding: this keyword search is sensitive to wording even when the requested fact stays the same. You save the note, both questions, and their outputs as a reproducible counterexample. The report’s perfect score cannot establish reliable answering. You have a useful test and a bounded claim, without building a tool.',
+    projectContext: 'Your wording check found Tuesday with “When does the reading group meet?” but missed it with “Which day is the book club?” That same-fact pair is the project’s reworded-question check.',
+    checkTitle: 'Reworded question',
+    caption: 'Two questions beside one note. A missed answer made visible.',
+  },
+  {
+    id: 'scoring',
+    title: 'Audit what counts as correct',
+    description: 'Label an answerable question and a missing-answer question by hand, then compare those labels with the report’s score.',
+    effects: { days: 2, money: -40, research: 15 },
+    outcomeTitle: 'A retrieved note is not always an answer.',
+    outcome: 'You label two questions against the same note: “The reading group meets Tuesday.” “When does the reading group meet?” is answerable; “Where is our venue?” is not. The report’s closest-match search returns the note for both and its scorer marks both correct. Against your answerability labels, only one of these two responses is correct. The original 4/4 measures retrieval, not answering. Two hand-checked cases expose that scoring flaw; they do not estimate overall accuracy or test paraphrases and conflicts.',
+    finding: 'Your finding: the report rewards retrieving a note even when the requested fact is absent. You save both questions, the answerability labels, and the scoring mismatch. An honest evaluation needs a no-answer case. This small audit refutes the report’s broad claim, not all meaning-based search. You finish with evidence and its limits, without building a tool.',
+    projectContext: 'Your scoring audit showed that returning “The reading group meets Tuesday” cannot answer “Where is our venue?” That missing-place example is the project’s no-answer check.',
+    checkTitle: 'No answer in the notes',
+    caption: 'A perfect score crossed out. Answerability labels beside the evidence.',
+  },
+] as const;
+
+export type InvestigationChoice = (typeof investigationChoices)[number];
+export type InvestigationState =
+  | { step: 'check'; approach: null }
+  | { step: 'result' | 'complete' | 'applied'; approach: InvestigationChoice };
 
 export const projectGoal =
   "Your first project: a small notes-search tool. It should find the right note when you remember the wording or only the meaning, flag conflicting notes, and admit when no note answers the question. You’ll build it, choose how to test it, then review four fixed checks. These are fictional notes; nothing on your computer is read.";
@@ -96,16 +131,17 @@ export type GameState = {
   date: Date;
   money: number;
   research: number;
+  investigation: InvestigationState | null;
   project: ProjectState | null;
 };
 
 export function startGame(now = new Date()): GameState {
   const date = new Date(now);
   date.setHours(0, 0, 0, 0);
-  return { choice: null, project: null, date, ...startingResources };
+  return { choice: null, investigation: null, project: null, date, ...startingResources };
 }
 
-function applyEffects(state: GameState, effects: Choice['effects'] | BuildChoice['effects'] | TestingChoice['effects']): GameState {
+function applyEffects(state: GameState, effects: Choice['effects'] | InvestigationChoice['effects'] | BuildChoice['effects'] | TestingChoice['effects']): GameState {
   const date = new Date(state.date);
   // Advance calendar days, including across daylight-saving changes and year ends.
   date.setDate(date.getDate() + effects.days);
@@ -124,7 +160,31 @@ export function chooseAction(state: GameState, choice: Choice): GameState {
 
 export function beginProject(state: GameState): GameState {
   if (!state.choice || state.project) return state;
-  return { ...state, project: { step: 'build', build: null, testing: null } };
+  if (state.choice.id === 'study' && state.investigation?.step !== 'result') return state;
+  return {
+    ...state,
+    investigation: state.investigation?.step === 'result'
+      ? { ...state.investigation, step: 'applied' } : state.investigation,
+    project: { step: 'build', build: null, testing: null },
+  };
+}
+
+export function beginInvestigation(state: GameState): GameState {
+  if (state.choice?.id !== 'study' || state.investigation || state.project) return state;
+  return { ...state, investigation: { step: 'check', approach: null } };
+}
+
+export function chooseInvestigation(state: GameState, approach: InvestigationChoice): GameState {
+  if (state.investigation?.step !== 'check' || state.project) return state;
+  return {
+    ...applyEffects(state, approach.effects),
+    investigation: { step: 'result', approach },
+  };
+}
+
+export function finishInvestigation(state: GameState): GameState {
+  if (state.investigation?.step !== 'result' || state.project) return state;
+  return { ...state, investigation: { ...state.investigation, step: 'complete' } };
 }
 
 export function chooseBuild(state: GameState, build: BuildChoice): GameState {
@@ -148,8 +208,10 @@ export function chooseTesting(state: GameState, testing: TestingChoice): GameSta
   };
 }
 
-// Fixed prototype evaluation: the opening resources do not secretly affect quality.
-export function evaluateProject(project: Extract<ProjectState, { step: 'complete' }>) {
+// Fixed prototype evaluation: prior research adds context, never successful checks.
+export function evaluateProject(
+  project: Extract<ProjectState, { step: 'complete' }>, investigation: InvestigationState | null = null,
+) {
   const semantic = project.build.id === 'semantic';
   const repaired = project.testing.id === 'thorough';
   const checks = [
@@ -158,17 +220,21 @@ export function evaluateProject(project: Extract<ProjectState, { step: 'complete
     { title: 'Conflicting notes', passed: repaired, detail: repaired ? 'The repair flags the disagreement for you to review.' : 'The first build returns one note without warning about the conflict.' },
     { title: 'No answer in the notes', passed: !semantic || repaired, detail: !semantic ? 'The index reports no matching words.' : repaired ? 'The new relevance check declines the weak match.' : 'The model offers an irrelevant closest match.' },
   ];
+  const approach = investigation?.step === 'applied' ? investigation.approach : null;
+  const evidence = approach
+    ? ` ${approach.projectContext} In your tool: ${checks.find(check => check.title === approach.checkTitle)!.detail} ${repaired ? 'The deeper pass paid for repairs; the investigation itself added no capabilities.' : 'You chose the familiar-question check, so the investigation led to no repairs.'}`
+    : '';
   return {
     title: repaired
       ? semantic ? 'A useful first tool.' : 'A modest tool with honest limits.'
       : 'A demo is not a dependable tool yet.',
-    outcome: repaired
+    outcome: (repaired
       ? semantic
         ? 'Meaning search handled both ways of asking. Your edge-case repairs caught conflicting evidence and missing answers. You keep this version for your own notes, with manual review for disagreements. Passing these four examples is a promising start, not proof it handles every question.'
         : 'Your keyword index finds exact phrases and admits when it has no match. The deeper pass added a warning for conflicting notes, but it could not fix differently worded questions. You keep it as an exact-word finder and write down that limit. A smaller success is still useful.'
       : semantic
         ? 'Meaning search found exact and reworded questions, but the familiar-question check left two failures untouched: conflicting notes and irrelevant matches. You set this prototype aside for repair. The research points reflect what you learned, not a reliable finished tool.'
-        : 'The cheap index found exact phrases and returned no match for the missing answer. But the familiar-question check left reworded questions and conflicting notes unresolved. You set this prototype aside for repair. You saved resources and now know exactly where the baseline falls short.',
+        : 'The cheap index found exact phrases and returned no match for the missing answer. But the familiar-question check left reworded questions and conflicting notes unresolved. You set this prototype aside for repair. You saved resources and now know exactly where the baseline falls short.') + evidence,
     caption: repaired ? 'A small tool, with its limits written down beside it.' : 'A prototype and a concrete list of repairs. The work can continue.',
     checks,
   };

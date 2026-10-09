@@ -15,6 +15,7 @@ test('a new game starts with the local calendar date and prototype resources', (
   assert.equal(state.money, 1_000);
   assert.equal(state.research, 0);
   assert.equal(state.choice, null);
+  assert.equal(state.investigation, null);
   assert.deepEqual(calendarDate(startGame().date), calendarDate(new Date()));
 });
 
@@ -93,6 +94,7 @@ test('restart restores resources, uses a fresh date, and allows deterministic re
     const result = chooseAction(startGame(now), choice);
     const restarted = startGame(now);
     assert.equal(restarted.choice, null);
+    assert.equal(restarted.investigation, null);
     assert.equal(restarted.money, 1_000);
     assert.equal(restarted.research, 0);
     assert.deepEqual(calendarDate(restarted.date), [2026, 10, 8]);

@@ -11,19 +11,20 @@ flowchart TD
     START --> STUDY[Understand the research]
     START --> CONNECT[Find your people]
 
-    BUILD -.-> PROTOTYPE["Develop the<br/>notes-search prototype"]
-    STUDY -.-> INVESTIGATE["Investigate a surprising<br/>evaluation result"]
+    BUILD --> PROTOTYPE["Notes-search project<br/>Choose a build"]
+    STUDY --> INVESTIGATE["Investigate a surprising result<br/>Check wording or scoring"]
+    CONNECT -->|Current route| PROTOTYPE
     CONNECT -.-> EXCHANGE["Compare examples<br/>with another builder"]
 
-    PROTOTYPE -. Test it yourself .-> CHECKS["Build or adapt a tool<br/>and check it"]
+    PROTOTYPE -->|Build then test| CHECKS["Choose testing<br/>and evaluate four checks"]
     PROTOTYPE -. Investigate a failure .-> INVESTIGATE
     PROTOTYPE -. Ask for feedback .-> EXCHANGE
     EXCHANGE -. Explore a shared question .-> INVESTIGATE
-    EXCHANGE -. Try examples in a tool .-> CHECKS
+    EXCHANGE -. Try examples in a tool .-> PROTOTYPE
     EXCHANGE -. Plan a shared experiment .-> COLLAB["Collaboration outcome:<br/>a concrete next step"]
-    INVESTIGATE -. Apply what you learned .-> CHECKS
-    INVESTIGATE -. Explain the evidence .-> FINDING["Research outcome:<br/>a reproducible finding"]
-    CHECKS -. Evaluate build and tests .-> TOOL["Tool outcome:<br/>useful, limited, or unfinished"]
+    INVESTIGATE -->|Apply finding: retain evidence| PROTOTYPE
+    INVESTIGATE -->|Finish with a finding| FINDING["Research outcome:<br/>a reproducible finding"]
+    CHECKS -->|Evaluate build and tests| TOOL["Tool outcome:<br/>useful, limited, or unfinished"]
 
     TOOL -.-> REVIEW["Review your result<br/>and next opportunity"]
     FINDING -.-> REVIEW
@@ -31,4 +32,8 @@ flowchart TD
     REVIEW -.-> END([End of this short playable slice])
 
     classDef proposed fill:#fff4df,stroke:#946200,color:#4b3400,stroke-dasharray:5 5
-    class PROTOTYPE,INVESTIGATE,EXCHANGE,CHECKS,COLLAB,FINDING,TOOL,REVIEW,END proposed
+    classDef implemented fill:#e7f0ff,stroke:#315f96,color:#172b4d
+    classDef ending fill:#e8f3e8,stroke:#397344,color:#173b20
+    class PROTOTYPE,INVESTIGATE,CHECKS implemented
+    class FINDING,TOOL ending
+    class EXCHANGE,COLLAB,REVIEW,END proposed
