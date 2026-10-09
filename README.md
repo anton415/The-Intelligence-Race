@@ -153,6 +153,7 @@ These are practical defaults, not a commitment to a large framework.
 ## Project documentation
 
 - [Game design and long-term vision](docs/GAME_DESIGN.md)
+- [Story paths: current flow and proposed branching web](docs/STORY_PATHS.md)
 - [GitHub issues](../../issues) — small tasks, developed and reviewed individually
 
 ## Development principle
