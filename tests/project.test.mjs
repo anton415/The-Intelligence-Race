@@ -7,6 +7,7 @@ import {
 
 const now = new Date(2026, 11, 30, 23, 30);
 const resources = ({ date, money, research }) => ({ date, money, research });
+const projectOpenings = choices.filter(choice => choice.id !== 'study');
 
 function assertEffects(before, after, { days, money, research }) {
   const date = new Date(before.date);
@@ -51,7 +52,7 @@ test('project actions cannot run before the opening or skip a decision', () => {
   assert.equal(beginProject(initial), initial);
 });
 
-for (const opening of choices) {
+for (const opening of projectOpenings) {
   test(`${opening.id}: entering the project preserves the opening decision, date and resources`, () => {
     const before = chooseAction(startGame(now), opening);
     const after = beginProject(before);
@@ -121,7 +122,7 @@ test('the four fixed evaluations explain capabilities, limits and consequences',
     semantic: { quick: [true, true, false, false], thorough: [true, true, true, true] },
   };
   const outcomes = new Set();
-  for (const opening of choices) {
+  for (const opening of projectOpenings) {
     for (const build of buildChoices) {
       for (const testing of testingChoices) {
         const result = evaluateProject(play(opening, build, testing).project);

@@ -7,7 +7,8 @@ A single-player, choice-driven game about developing AI, building organizations,
 **[Play The Intelligence Race](https://anton415.github.io/The-Intelligence-Race/)**
 
 The first release, **v0.1.0**, is the playable opening scene. The current source
-extends it into a first notes-search project: choose → build → test → evaluate.
+extends it into a notes-search project and a distinct research investigation:
+investigate → finish with a finding, or apply it → build → test → evaluate.
 We will expand the game in small, playable updates.
 
 The GitHub Pages site rebuilds and updates automatically whenever changes merge
@@ -29,7 +30,7 @@ Open the local URL printed by Vite (normally http://localhost:5173/The-Intellige
 ```bash
 npm run build    # Type-check and build into dist/
 npm run preview  # Serve the production build locally
-npm test         # Check opening/project transitions, evaluations, dates, and restart
+npm test         # Check opening/research/project routes, evaluations, dates, and restart
 ```
 
 The production preview uses the same `/The-Intelligence-Race/` path as GitHub Pages.
@@ -38,8 +39,9 @@ The opening has one pixel-style developer room with a blinking monitor, an
 introduction, and exactly three choices. Each has a fixed, distinct outcome and
 shows its duration and resource changes before selection, including unchanged resources.
 The status panel displays the in-game date, money in USD, and research progress in points.
-Every opening outcome offers a free continuation into the same notes-search project,
-preserving the opening decision, date, money, and research.
+The build and community openings offer a free continuation into the notes-search
+project. The research opening first leads to an investigation. All routes preserve
+the opening decision, date, money, and research.
 **Restart** restores the introduction so you can try the other paths.
 Use Tab/Shift+Tab to move between controls and Enter/Space to activate buttons.
 The monitor animation respects your system's reduced-motion preference.
@@ -54,10 +56,31 @@ research points are a cumulative score, not a percentage or a completed project.
 | Understand the research | 3 days | $0 USD (unchanged) | +20 points |
 | Find your people | 1 day | $0 USD (unchanged) | 0 points (unchanged) |
 
+### Research: behind the score
+
+“Understand the research” opens a small fictional evaluation report. It claims 4/4
+by counting retrieved notes as correct answers, even though “Where is our venue?”
+returns “The reading group meets Tuesday.” Investigate what that score establishes
+before making any project-building choice:
+
+| Checking approach | Time | Money change | Research change | Evidence and limits |
+| --- | --- | --- | --- | --- |
+| Change only the wording | 1 day | $0 USD (unchanged) | +10 points | The same note answers an exact question but a toy keyword search misses a paraphrase. One controlled pair reveals sensitivity to wording; it does not estimate failure rates or resolve missing answers and conflicts. |
+| Audit what counts as correct | 2 days | −$40 USD | +15 points | Hand-label an answerable question and a missing-place question. Retrieval scores both as correct; only one actually answers the question. This exposes a scoring flaw, without measuring overall accuracy or checking paraphrases and conflicts. |
+
+After reading the result, choose **Finish with a finding** for a complete research
+ending with no built tool, or **Apply the finding** to enter the project at its build
+decision. Both are free routing choices; neither repeats costs. The finding records
+the method, observed result, and limits. The crossover retains that evidence and
+all resources, uses its specific example in the testing context, and explains the
+relevant check again in the tool's conclusion. Investigating grants no repairs or
+successful checks. Research endings are endpoints; replay requires Restart.
+
 ### First project: search your notes
 
 The goal is to find a relevant note using exact wording or a paraphrase, flag
-conflicting notes, and admit when the notes contain no answer. After the opening,
+conflicting notes, and admit when the notes contain no answer. After a build/community
+opening or the research crossover,
 choose a build approach, read its result, then choose a testing approach. The second
 choice includes evaluation and ends the project. All notes, models, and results
 are fictional and authored; no user files are read and no real AI is run.
@@ -70,9 +93,11 @@ are fictional and authored; no user files are read and no real AI is run.
 | Test | Test edge cases and repair | 2 days | −$80 USD | +15 points |
 
 These are prototype costs, not estimates of real AI development. The most expensive
-complete path spends $360 including the opening, leaving $640; all 12 combinations
-of opening, build, and test can finish. Research remains a cumulative score and
-does not secretly alter the evaluation.
+complete path spends $360 including the opening, leaving $640. There are 18
+finishable routes: 8 direct project combinations (2 openings × 2 builds × 2 tests),
+2 research endings, and 8 crossovers (2 investigations × 2 builds × 2 tests).
+The most expensive crossover spends $300, leaving $700. Research remains a
+cumulative score and does not secretly alter the evaluation.
 
 Evaluation always uses four fixed checks. The quick test confirms an exact match
 without repairs. The deeper test adds conflict warnings and rejection of weak
@@ -87,14 +112,15 @@ matches; it does not add meaning search to a keyword index.
 
 Each ending explains the checks and how the decisions contributed. Passing four
 examples does not establish general reliability. The same decisions always produce
-the same result; the opening affects resources and remains recorded, but introduces
-no hidden quality bonus. Setbacks end with a repair plan, not a dead end or Game Over.
+the same result. Opening and investigation choices affect resources and narration,
+but introduce no hidden quality bonus. Setbacks end with a repair plan, not a dead
+end or Game Over.
 
-Each committed choice applies its effects **once**. Reading build results and using
-the two continuation buttons cost no time or resources. Time advances in calendar
+Each committed choice applies its effects **once**. Reading results and using
+narration/routing continuations cost no time or resources. Time advances in calendar
 days, including across month/year boundaries and daylight-saving changes. Waiting,
 inspecting, or leaving the game does not advance time or resources. Restart at any
-step clears both opening and project decisions, uses the current local date and
+step clears opening, investigation, and project decisions, uses the current local date and
 starting resources, restores all three opening choices, and focuses the first one.
 There is no saving yet: reloading also starts a new game.
 
@@ -106,17 +132,20 @@ requires internet access; playing through the local server does not.
 Story data and decision state live in `src/game.ts`; `src/main.ts` presents them,
 and `src/style.css` draws the room. Starting resources, choice effects, and transition
 rules and fixed evaluation checks are all in `src/game.ts`. This is the opening plus
-one project loop, not the full 10–15 minute v0.1 described below. Saving, further
+one investigation with a project crossover, not the full 10–15 minute v0.1 described below. Saving, further
 projects, rival events, hiring, and company simulation are not implemented.
 
 To check the slice manually, use `npm run build` and `npm run preview`, then open
-`/The-Intelligence-Race/`. Try each opening through a project conclusion, and all
-four build/test combinations. Confirm advertised costs, free continuation, distinct
+`/The-Intelligence-Race/`. Try each investigation through its research ending and
+each crossover through all four build/test combinations. Recheck the build and
+community openings through all four combinations. Confirm advertised costs,
+free continuation, retained investigation evidence, unchanged project checks, distinct
 evaluation explanations, and deterministic replay. Try repeated activation and
-waiting; neither should duplicate costs or skip a decision. Restart from the build,
-build result, testing step, and conclusion; check resources, date, and first-choice
+waiting; neither should duplicate costs or skip a decision. Restart from the
+investigation, its result and ending, and each crossover/project step; check resources, date, and first-choice
 focus. Repeat with Tab/Shift+Tab and Enter/Space, a narrow viewport, and reduced
-motion enabled. The project loop requires user playtest acceptance before merge.
+motion enabled. The research path and crossover require user playtest acceptance
+before merge or issue closure.
 
 ## The premise
 

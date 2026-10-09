@@ -11,9 +11,18 @@ flowchart TD
     START --> STUDY[Understand the research]
     START --> CONNECT[Find your people]
 
-    BUILD --> PROJECT[Same notes-search project]
-    STUDY --> PROJECT
+    BUILD --> PROJECT[Notes-search build decision]
+    STUDY --> INVESTIGATE[Investigate the perfect score]
     CONNECT --> PROJECT
+
+    INVESTIGATE --> WORDING[Change only the wording]
+    INVESTIGATE --> SCORING[Audit what counts as correct]
+    WORDING --> W_EVIDENCE["Same fact, missed paraphrase<br/>One pair; no failure-rate estimate"]
+    SCORING --> S_EVIDENCE["Retrieval is not answering<br/>Two cases; no accuracy estimate"]
+    W_EVIDENCE -->|Finish with a finding| W_FINDING["Wording finding<br/>No tool built"]
+    S_EVIDENCE -->|Finish with a finding| S_FINDING["Scoring finding<br/>No tool built"]
+    W_EVIDENCE -->|Apply: retain evidence and resources| PROJECT
+    S_EVIDENCE -->|Apply: retain evidence and resources| PROJECT
 
     PROJECT --> WORDS[Match the words]
     PROJECT --> MEANING[Search by meaning]
@@ -30,4 +39,4 @@ flowchart TD
     classDef shared fill:#e7f0ff,stroke:#315f96,color:#172b4d
     classDef ending fill:#e8f3e8,stroke:#397344,color:#173b20
     class PROJECT shared
-    class W_REPAIR,LIMITED,M_REPAIR,USEFUL ending
+    class W_FINDING,S_FINDING,W_REPAIR,LIMITED,M_REPAIR,USEFUL ending
