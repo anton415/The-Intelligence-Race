@@ -4,8 +4,9 @@ This map separates **what is playable today** from a **proposed story web** for
 the first complete 10–15 minute game. The proposal is for discussion, not an
 implementation commitment. A playthrough follows only part of the web.
 
-The diagrams use Mermaid and render in GitHub's Markdown preview. Edit the diagrams
-here as the story changes; keep implemented paths and proposed paths distinct.
+The diagrams are saved as SVG images so they remain visible without GitHub's live
+Mermaid renderer. Their editable Mermaid sources are linked below each image. Keep
+implemented paths and proposed paths distinct as the story changes.
 
 ## Current playable paths
 
@@ -14,34 +15,9 @@ Verified against [the story and state rules](../src/game.ts) after PR #7
 Every solid arrow below is implemented. Boxes summarize scenes and decisions;
 free narration continuations are omitted.
 
-```mermaid
-flowchart TD
-    START([Start: solo developer])
-    START --> BUILD[Build something small]
-    START --> STUDY[Understand the research]
-    START --> CONNECT[Find your people]
+![Current paths: all three openings converge on the notes-search project, then branch into four build and test outcomes.](diagrams/current-paths.svg)
 
-    BUILD --> PROJECT[Same notes-search project]
-    STUDY --> PROJECT
-    CONNECT --> PROJECT
-
-    PROJECT --> WORDS[Match the words]
-    PROJECT --> MEANING[Search by meaning]
-    WORDS --> W_QUICK[Check one familiar question]
-    WORDS --> W_DEEP[Test edge cases and repair]
-    MEANING --> M_QUICK[Check one familiar question]
-    MEANING --> M_DEEP[Test edge cases and repair]
-
-    W_QUICK --> W_REPAIR[2 of 4 checks: set aside for repair]
-    W_DEEP --> LIMITED[3 of 4 checks: keep as an exact-word finder]
-    M_QUICK --> M_REPAIR[2 of 4 checks: set aside for repair]
-    M_DEEP --> USEFUL[4 of 4 checks: keep for personal use with review]
-
-    classDef shared fill:#e7f0ff,stroke:#315f96,color:#172b4d
-    classDef ending fill:#e8f3e8,stroke:#397344,color:#173b20
-    class PROJECT shared
-    class W_REPAIR,LIMITED,M_REPAIR,USEFUL ending
-```
+[Open full-size diagram](diagrams/current-paths.svg) · [Edit Mermaid source](diagrams/current-paths.mmd)
 
 There are **12 combinations**: 3 openings × 2 build methods × 2 testing choices.
 These produce four evaluation explanations and three ending types; both quick-test
@@ -63,39 +39,13 @@ between building, research, and community work. These are directions the player 
 change, not permanent character classes.
 
 **Solid arrows:** the existing opening choices. **Dashed arrows:** proposed
-connections. Boxes marked **Proposed** are new scenes or extensions. The prototype
-and checks boxes would reuse the current project where appropriate; their placement
-and connections below are still proposed.
+connections. **Amber boxes with dashed borders** are proposed scenes or extensions.
+The prototype and checks boxes would reuse the current project where appropriate;
+their placement and connections below are still proposed.
 
-```mermaid
-flowchart TD
-    START([Start: solo developer])
-    START --> BUILD[Build something small]
-    START --> STUDY[Understand the research]
-    START --> CONNECT[Find your people]
+![Proposed story web: build, research, and community routes cross between scenes and reach different outcomes.](diagrams/proposed-story-web.svg)
 
-    BUILD -.-> PROTOTYPE[Proposed: develop the notes-search prototype]
-    STUDY -.-> INVESTIGATE[Proposed: investigate a surprising evaluation result]
-    CONNECT -.-> EXCHANGE[Proposed: compare examples with another builder]
-
-    PROTOTYPE -. Test it yourself .-> CHECKS[Proposed: build or adapt a tool and check it]
-    PROTOTYPE -. Investigate a failure .-> INVESTIGATE
-    PROTOTYPE -. Ask for feedback .-> EXCHANGE
-    EXCHANGE -. Explore a shared question .-> INVESTIGATE
-    EXCHANGE -. Try the examples in a tool .-> CHECKS
-    EXCHANGE -. Agree on a small shared experiment .-> COLLAB[Proposed outcome: a collaboration with a concrete next step]
-    INVESTIGATE -. Apply what you learned .-> CHECKS
-    INVESTIGATE -. Explain the evidence and its limits .-> FINDING[Proposed outcome: a reproducible finding]
-    CHECKS -. Evaluate the selected build and tests .-> TOOL[Proposed outcome: a useful, limited, or unfinished tool]
-
-    TOOL -.-> REVIEW[Proposed: review your result and next opportunity]
-    FINDING -.-> REVIEW
-    COLLAB -.-> REVIEW
-    REVIEW -.-> END([End of this short playable slice])
-
-    classDef proposed fill:#fff4df,stroke:#946200,color:#4b3400,stroke-dasharray:5 5
-    class PROTOTYPE,INVESTIGATE,EXCHANGE,CHECKS,COLLAB,FINDING,TOOL,REVIEW,END proposed
-```
+[Open full-size diagram](diagrams/proposed-story-web.svg) · [Edit Mermaid source](diagrams/proposed-story-web.mmd)
 
 Examples of different journeys through this web:
 
@@ -140,3 +90,16 @@ against applying the same reward repeatedly; no such loop is proposed here yet.
 
 This document changes no gameplay and does not add tasks automatically. The broader
 company and world simulation remains in the [long-term design](GAME_DESIGN.md).
+
+## Updating the diagrams
+
+Edit the linked `.mmd` source, regenerate its matching `.svg`, and commit both in
+the same documentation change. With Mermaid CLI available, run from the repository
+root:
+
+```bash
+mmdc -i docs/diagrams/current-paths.mmd -o docs/diagrams/current-paths.svg -b white
+mmdc -i docs/diagrams/proposed-story-web.mmd -o docs/diagrams/proposed-story-web.svg -b white
+```
+
+Diagram generation is a documentation tool; it is not part of the game build.

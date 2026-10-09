@@ -1,0 +1,33 @@
+---
+config:
+  theme: neutral
+  flowchart:
+    htmlLabels: false
+    curve: basis
+---
+flowchart TD
+    START([Start: solo developer])
+    START --> BUILD[Build something small]
+    START --> STUDY[Understand the research]
+    START --> CONNECT[Find your people]
+
+    BUILD --> PROJECT[Same notes-search project]
+    STUDY --> PROJECT
+    CONNECT --> PROJECT
+
+    PROJECT --> WORDS[Match the words]
+    PROJECT --> MEANING[Search by meaning]
+    WORDS --> W_QUICK["Check one<br/>familiar question"]
+    WORDS --> W_DEEP["Test edge cases<br/>and repair"]
+    MEANING --> M_QUICK["Check one<br/>familiar question"]
+    MEANING --> M_DEEP["Test edge cases<br/>and repair"]
+
+    W_QUICK --> W_REPAIR["2 of 4 checks<br/>Set aside for repair"]
+    W_DEEP --> LIMITED["3 of 4 checks<br/>Keep as an exact-word finder"]
+    M_QUICK --> M_REPAIR["2 of 4 checks<br/>Set aside for repair"]
+    M_DEEP --> USEFUL["4 of 4 checks<br/>Keep for personal use<br/>with review"]
+
+    classDef shared fill:#e7f0ff,stroke:#315f96,color:#172b4d
+    classDef ending fill:#e8f3e8,stroke:#397344,color:#173b20
+    class PROJECT shared
+    class W_REPAIR,LIMITED,M_REPAIR,USEFUL ending

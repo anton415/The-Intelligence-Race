@@ -1,0 +1,34 @@
+---
+config:
+  theme: neutral
+  flowchart:
+    htmlLabels: false
+    curve: basis
+---
+flowchart TD
+    START([Start: solo developer])
+    START --> BUILD[Build something small]
+    START --> STUDY[Understand the research]
+    START --> CONNECT[Find your people]
+
+    BUILD -.-> PROTOTYPE["Develop the<br/>notes-search prototype"]
+    STUDY -.-> INVESTIGATE["Investigate a surprising<br/>evaluation result"]
+    CONNECT -.-> EXCHANGE["Compare examples<br/>with another builder"]
+
+    PROTOTYPE -. Test it yourself .-> CHECKS["Build or adapt a tool<br/>and check it"]
+    PROTOTYPE -. Investigate a failure .-> INVESTIGATE
+    PROTOTYPE -. Ask for feedback .-> EXCHANGE
+    EXCHANGE -. Explore a shared question .-> INVESTIGATE
+    EXCHANGE -. Try examples in a tool .-> CHECKS
+    EXCHANGE -. Plan a shared experiment .-> COLLAB["Collaboration outcome:<br/>a concrete next step"]
+    INVESTIGATE -. Apply what you learned .-> CHECKS
+    INVESTIGATE -. Explain the evidence .-> FINDING["Research outcome:<br/>a reproducible finding"]
+    CHECKS -. Evaluate build and tests .-> TOOL["Tool outcome:<br/>useful, limited, or unfinished"]
+
+    TOOL -.-> REVIEW["Review your result<br/>and next opportunity"]
+    FINDING -.-> REVIEW
+    COLLAB -.-> REVIEW
+    REVIEW -.-> END([End of this short playable slice])
+
+    classDef proposed fill:#fff4df,stroke:#946200,color:#4b3400,stroke-dasharray:5 5
+    class PROTOTYPE,INVESTIGATE,EXCHANGE,CHECKS,COLLAB,FINDING,TOOL,REVIEW,END proposed
